@@ -1,0 +1,251 @@
+3. List of all DBs.
+    > show dbs
+    admin   0.000GB
+    config  0.000GB
+    local   0.000GB
+
+4.Create a database
+    >use newdb;
+
+5.CRUD operations
+    i.  Insert
+        > doc = { name : 'harshwardhan',age : 11, hobbies : 5}
+        { "name" : "harshwardhan", "age" : 11, "hobbies" : 5 }
+        > db.col1.insert(doc);
+        WriteResult({ "nInserted" : 1 })
+        > doc = { name : 'nishant',age : 54, hobbies : 4}
+        { "name" : "nishant", "age" : 54, "hobbies" : 4 }
+        > db.col1.insert(doc);
+        WriteResult({ "nInserted" : 1 })
+        > doc = { name : 'mana',age : 454, hobbies : 54}
+        { "name" : "mana", "age" : 454, "hobbies" : 54 }
+        > db.col1.insert(doc);
+        WriteResult({ "nInserted" : 1 })
+        > doc = { name : 'nikita',age : 54, hobbies : 454}
+        { "name" : "nikita", "age" : 54, "hobbies" : 454 }
+        > db.col1.insert(doc);
+        WriteResult({ "nInserted" : 1 })
+
+
+    ii. Find
+        > db.col1.find().pretty()
+        {
+            "_id" : ObjectId("5a9e8910cc736c78d5be737d"),
+            "name" : "harshwardhan",
+            "age" : 11,
+            "hobbies" : 5
+        }
+        {
+            "_id" : ObjectId("5a9e8934cc736c78d5be737e"),
+            "name" : "nishant",
+            "age" : 54,
+            "hobbies" : 4
+        }
+        {
+            "_id" : ObjectId("5a9e8972cc736c78d5be737f"),
+            "name" : "mana",
+            "age" : 454,
+            "hobbies" : 54
+        }
+        {
+            "_id" : ObjectId("5a9e89b1cc736c78d5be7380"),
+            "name" : "nikita",
+            "age" : 54,
+            "hobbies" : 454
+        }
+    iii.Update
+        > db.col1.update({name : 'mana'},{$set : { age : 45 }})
+        WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+    iv. Remove
+        > db.col1.remove( {name:'harshwardhan'})
+        WriteResult({ "nRemoved" : 1 })
+
+5.a Bonus
+    i.  FindOne
+        > db.col1.findOne({$or : [{name : 'nishant'},{name : 'nikita'}]})
+        {
+            "_id" : ObjectId("5a9e8934cc736c78d5be737e"),
+            "name" : "nishant",
+            "age" : 54,
+            "hobbies" : 4
+        }
+    ii. InsertMany
+        > doc = { name : 'harshwardhan',age : 11, hobbies : 5}
+        { "name" : "harshwardhan", "age" : 11, "hobbies" : 5 }
+        > doc1 = { name : 'neha',age : 18, hobbies : 15}
+        { "name" : "neha", "age" : 18, "hobbies" : 15 }
+        > db.col1.insertMany([doc,doc1]);
+        {
+            "acknowledged" : true,
+            "insertedIds" : [
+                ObjectId("5a9e93969f46a4cfb469549e"),
+                ObjectId("5a9e93969f46a4cfb469549f")
+            ]
+        }
+    Modified Collecion
+        > db.col1.find().pretty()
+        {
+            "_id" : ObjectId("5a9e8934cc736c78d5be737e"),
+            "name" : "nishant",
+            "age" : 54,
+            "hobbies" : 4
+        }
+        {
+            "_id" : ObjectId("5a9e8972cc736c78d5be737f"),
+            "name" : "mana",
+            "age" : 45,
+            "hobbies" : 54
+        }
+        {
+            "_id" : ObjectId("5a9e89b1cc736c78d5be7380"),
+            "name" : "nikita",
+            "age" : 54,
+            "hobbies" : 454
+        }
+        {
+            "_id" : ObjectId("5a9e93969f46a4cfb469549e"),
+            "name" : "harshwardhan",
+            "age" : 11,
+            "hobbies" : 5
+        }
+        {
+            "_id" : ObjectId("5a9e93969f46a4cfb469549f"),
+            "name" : "neha",
+            "age" : 18,
+            "hobbies" : 15
+        }
+
+    iii.UpdateMany 
+        > db.col1.updateMany({ age: { $gt: 50 } },{$set : { age : 50 }})
+        { "acknowledged" : true, "matchedCount" : 2, "modifiedCount" : 2 }
+
+    Modified Collecion
+        > db.col1.find().pretty()
+        {
+            "_id" : ObjectId("5a9e8934cc736c78d5be737e"),
+            "name" : "nishant",
+            "age" : 50,
+            "hobbies" : 4
+        }
+        {
+            "_id" : ObjectId("5a9e8972cc736c78d5be737f"),
+            "name" : "mana",
+            "age" : 45,
+            "hobbies" : 54
+        }
+        {
+            "_id" : ObjectId("5a9e89b1cc736c78d5be7380"),
+            "name" : "nikita",
+            "age" : 50,
+            "hobbies" : 454
+        }
+        {
+            "_id" : ObjectId("5a9e93969f46a4cfb469549e"),
+            "name" : "harshwardhan",
+            "age" : 11,
+            "hobbies" : 5
+        }
+        {
+            "_id" : ObjectId("5a9e93969f46a4cfb469549f"),
+            "name" : "neha",
+            "age" : 18,
+            "hobbies" : 15
+        }
+
+    iv. DeleteMany
+        > db.col1.deleteMany({ age : 50 });
+        { "acknowledged" : true, "deletedCount" : 2 }
+        > db.col1.find().pretty()
+        {
+            "_id" : ObjectId("5a9e8972cc736c78d5be737f"),
+            "name" : "mana",
+            "age" : 45,
+            "hobbies" : 54
+        }
+        {
+            "_id" : ObjectId("5a9e93969f46a4cfb469549e"),
+            "name" : "harshwardhan",
+            "age" : 11,
+            "hobbies" : 5
+        }
+        {
+            "_id" : ObjectId("5a9e93969f46a4cfb469549f"),
+            "name" : "neha",
+            "age" : 18,
+            "hobbies" : 15
+        }
+   
+
+
+
+6.Cursor operations
+    Collection:
+    > db.col1.find().pretty()
+    {
+        "_id" : ObjectId("5a9e8934cc736c78d5be737e"),
+        "name" : "nishant",
+        "age" : 54,
+        "hobbies" : 4
+    }
+    {
+        "_id" : ObjectId("5a9e8972cc736c78d5be737f"),
+        "name" : "mana",
+        "age" : 45,
+        "hobbies" : 54
+    }
+    {
+        "_id" : ObjectId("5a9e89b1cc736c78d5be7380"),
+        "name" : "nikita",
+        "age" : 54,
+        "hobbies" : 454
+    }
+
+
+    > db.col1.find().sort({age:1}).limit(1).skip(1).pretty()
+    {
+        "_id" : ObjectId("5a9e8934cc736c78d5be737e"),
+        "name" : "nishant",
+        "age" : 54,
+        "hobbies" : 4
+    }
+
+
+    > db.col1.find().sort({age:1}).skip(1).limit(1).pretty()
+    {
+        "_id" : ObjectId("5a9e8934cc736c78d5be737e"),
+        "name" : "nishant",
+        "age" : 54,
+        "hobbies" : 4
+    }
+
+
+    > db.col1.find().skip(1).sort({age:1}).limit(1).pretty()
+    {
+        "_id" : ObjectId("5a9e8934cc736c78d5be737e"),
+        "name" : "nishant",
+        "age" : 54,
+        "hobbies" : 4
+    }
+
+
+    > db.col1.find().skip(1).limit(1).sort({age:1}).pretty()
+    {
+        "_id" : ObjectId("5a9e8934cc736c78d5be737e"),
+        "name" : "nishant",
+        "age" : 54,
+        "hobbies" : 4
+    }
+
+    > db.col1.find().limit(1).skip(1).sort({age:1}).pretty()
+    {
+        "_id" : ObjectId("5a9e8934cc736c78d5be737e"),
+        "name" : "nishant",
+        "age" : 54,
+        "hobbies" : 4
+    }
+
+
+
+
+ 
